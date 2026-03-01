@@ -1,0 +1,708 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RNLC 2월 팀 대항전</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+
+        h1 {
+            text-align: center;
+            color: #667eea;
+            margin-bottom: 30px;
+            font-size: 2.5em;
+        }
+
+        .input-section {
+            background: #f8f9fa;
+            padding: 25px;
+            border-radius: 15px;
+            margin-bottom: 30px;
+        }
+
+        .input-group {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .input-field {
+            display: flex;
+            flex-direction: column;
+        }
+
+        label {
+            margin-bottom: 5px;
+            font-weight: 600;
+            color: #333;
+        }
+
+        input, select {
+            padding: 12px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: border-color 0.3s;
+        }
+
+        input:focus, select:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .notice {
+            background: #fff3cd;
+            border: 1px solid #ffc107;
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            color: #856404;
+        }
+
+        button {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 10px;
+            font-size: 18px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+            width: 100%;
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(102, 126, 234, 0.4);
+        }
+
+        button:active {
+            transform: translateY(0);
+        }
+
+        .stats-section {
+            margin-bottom: 30px;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+
+        .stat-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 15px;
+            text-align: center;
+        }
+
+        .stat-label {
+            font-size: 14px;
+            opacity: 0.9;
+            margin-bottom: 8px;
+        }
+
+        .stat-value {
+            font-size: 28px;
+            font-weight: 700;
+        }
+
+        .team-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+
+        .team-card {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 10px;
+            text-align: center;
+            border: 3px solid transparent;
+            transition: all 0.3s;
+        }
+
+        .team-card:hover {
+            border-color: #667eea;
+            transform: translateY(-3px);
+        }
+
+        .team-name {
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 5px;
+        }
+
+        .team-distance {
+            font-size: 20px;
+            color: #667eea;
+        }
+
+        .ranking-section {
+            margin-bottom: 30px;
+        }
+
+        h2 {
+            color: #333;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 3px solid #667eea;
+        }
+
+        .ranking-tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .tab-button {
+            padding: 10px 20px;
+            background: #f8f9fa;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: 600;
+        }
+
+        .tab-button.active {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-color: #667eea;
+        }
+
+        .ranking-table {
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .ranking-table th {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 15px;
+            text-align: left;
+            font-weight: 600;
+        }
+
+        .ranking-table td {
+            padding: 12px 15px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .ranking-table tr:hover {
+            background: #f8f9fa;
+        }
+
+        .rank-badge {
+            display: inline-block;
+            width: 30px;
+            height: 30px;
+            line-height: 30px;
+            text-align: center;
+            border-radius: 50%;
+            font-weight: 700;
+            color: white;
+        }
+
+        .rank-1 { background: gold; color: #333; }
+        .rank-2 { background: silver; color: #333; }
+        .rank-3 { background: #cd7f32; }
+
+        .filters {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-bottom: 15px;
+        }
+
+        .filter-btn {
+            padding: 8px 16px;
+            background: white;
+            border: 2px solid #ddd;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 14px;
+        }
+
+        .filter-btn.active {
+            background: #667eea;
+            color: white;
+            border-color: #667eea;
+        }
+
+        .records-list {
+            max-height: 400px;
+            overflow-y: auto;
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 10px;
+        }
+
+        .record-item {
+            background: white;
+            padding: 12px;
+            margin-bottom: 10px;
+            border-radius: 8px;
+            border-left: 4px solid #667eea;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 40px;
+            color: #667eea;
+            font-size: 18px;
+        }
+
+        .admin-link {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .admin-link a {
+            color: #667eea;
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .modal.show {
+            display: flex;
+        }
+
+        .modal-content {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            text-align: center;
+            max-width: 400px;
+        }
+
+        .modal-content h3 {
+            color: #667eea;
+            margin-bottom: 20px;
+        }
+
+        .modal-content button {
+            margin-top: 20px;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 15px;
+            }
+
+            h1 {
+                font-size: 1.8em;
+            }
+
+            .input-group {
+                grid-template-columns: 1fr;
+            }
+
+            .stats-grid, .team-stats {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🏃 RNLC 2월 팀 대항전</h1>
+
+        <!-- 입력 섹션 -->
+        <div class="input-section">
+            <div class="input-group">
+                <div class="input-field">
+                    <label for="name">이름</label>
+                    <input type="text" id="name" placeholder="이름 입력">
+                </div>
+                <div class="input-field">
+                    <label for="team">팀</label>
+                    <select id="team">
+                        <option value="">선택</option>
+                        <option value="R">R</option>
+                        <option value="N">N</option>
+                        <option value="L">L</option>
+                        <option value="C">C</option>
+                    </select>
+                </div>
+                <div class="input-field">
+                    <label for="distance">거리(km)</label>
+                    <input type="number" id="distance" placeholder="거리 입력" step="0.1">
+                </div>
+            </div>
+            <div class="notice">
+                ※ 300km 초과 기록은 저장되며, <strong>누계/랭킹에는 300km까지만 반영</strong>됩니다.
+            </div>
+            <button onclick="submitRecord()">입력 완료</button>
+        </div>
+
+        <!-- 누계 현황 -->
+        <div class="stats-section">
+            <h2>📊 누계 현황</h2>
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-label">내 누계</div>
+                    <div class="stat-value" id="myTotal">-</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">내 팀</div>
+                    <div class="stat-value" id="myTeam">-</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">팀 순위</div>
+                    <div class="stat-value" id="teamRank">-</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">현재 1위 팀 누계</div>
+                    <div class="stat-value" id="firstTeam">-</div>
+                </div>
+            </div>
+
+            <div class="team-stats">
+                <div class="team-card">
+                    <div class="team-name">R</div>
+                    <div class="team-distance" id="teamR">0 km</div>
+                </div>
+                <div class="team-card">
+                    <div class="team-name">N</div>
+                    <div class="team-distance" id="teamN">0 km</div>
+                </div>
+                <div class="team-card">
+                    <div class="team-name">L</div>
+                    <div class="team-distance" id="teamL">0 km</div>
+                </div>
+                <div class="team-card">
+                    <div class="team-name">C</div>
+                    <div class="team-distance" id="teamC">0 km</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 개인 랭킹 -->
+        <div class="ranking-section">
+            <h2>🏆 개인 랭킹</h2>
+            <div class="ranking-tabs">
+                <button class="tab-button active" onclick="showRanking('top')">TOP 10</button>
+                <button class="tab-button" onclick="showRanking('bottom')">하위 10</button>
+            </div>
+            <div id="topRanking">
+                <p style="margin-bottom: 10px; color: #666;">300km 초과는 300km까지만 반영</p>
+                <table class="ranking-table">
+                    <thead>
+                        <tr>
+                            <th>순위</th>
+                            <th>이름</th>
+                            <th>팀</th>
+                            <th>거리(km)</th>
+                        </tr>
+                    </thead>
+                    <tbody id="topRankingBody">
+                        <tr><td colspan="4" class="loading">불러오는 중...</td></tr>
+                    </tbody>
+                </table>
+            </div>
+            <div id="bottomRanking" style="display: none;">
+                <p style="margin-bottom: 10px; color: #666;">하위 10명 (기록이 있는 참가자)</p>
+                <table class="ranking-table">
+                    <thead>
+                        <tr>
+                            <th>순위</th>
+                            <th>이름</th>
+                            <th>팀</th>
+                            <th>거리(km)</th>
+                        </tr>
+                    </thead>
+                    <tbody id="bottomRankingBody">
+                        <tr><td colspan="4" class="loading">불러오는 중...</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- 최근 인증 기록 -->
+        <div class="ranking-section">
+            <h2>📝 최근 인증 기록</h2>
+            <div class="filters">
+                <button class="filter-btn active" onclick="filterRecords('all')">전체</button>
+                <button class="filter-btn" onclick="filterRecords('myTeam')">내 팀만</button>
+                <button class="filter-btn" onclick="filterRecords('myName')">내 이름만</button>
+                <button class="filter-btn" onclick="filterRecords('today')">오늘만</button>
+            </div>
+            <div class="records-list" id="recordsList">
+                <div class="loading">불러오는 중...</div>
+            </div>
+        </div>
+
+        <div class="admin-link">
+            <a href="./admin.html">🔐 DB(관리자)</a>
+        </div>
+    </div>
+
+    <!-- 완료 모달 -->
+    <div class="modal" id="successModal">
+        <div class="modal-content">
+            <h3>✅ 완료되었습니다</h3>
+            <p>기록이 성공적으로 저장되었습니다.</p>
+            <button onclick="closeModal()">닫기</button>
+        </div>
+    </div>
+
+    <script>
+        // 데이터 저장소 (실제로는 Firebase나 백엔드 DB 사용)
+        let records = JSON.parse(localStorage.getItem('rnlcRecords') || '[]');
+        const MAX_LIMIT = 300; // 300km로 변경
+
+        // 초기화
+        document.addEventListener('DOMContentLoaded', function() {
+            updateStats();
+            updateRankings();
+            updateRecentRecords();
+        });
+
+        // 기록 제출
+        function submitRecord() {
+            const name = document.getElementById('name').value.trim();
+            const team = document.getElementById('team').value;
+            const distance = parseFloat(document.getElementById('distance').value);
+
+            if (!name || !team || !distance || distance <= 0) {
+                alert('모든 항목을 올바르게 입력해주세요.');
+                return;
+            }
+
+            const record = {
+                name,
+                team,
+                distance,
+                timestamp: new Date().toISOString(),
+                id: Date.now()
+            };
+
+            records.push(record);
+            localStorage.setItem('rnlcRecords', JSON.stringify(records));
+
+            // 입력 필드 초기화
+            document.getElementById('distance').value = '';
+
+            // UI 업데이트
+            updateStats();
+            updateRankings();
+            updateRecentRecords();
+
+            // 모달 표시
+            document.getElementById('successModal').classList.add('show');
+        }
+
+        // 모달 닫기
+        function closeModal() {
+            document.getElementById('successModal').classList.remove('show');
+        }
+
+        // 통계 업데이트
+        function updateStats() {
+            const name = document.getElementById('name').value.trim();
+            const team = document.getElementById('team').value;
+
+            // 개인 누계
+            const myRecords = records.filter(r => r.name === name);
+            const myTotal = myRecords.reduce((sum, r) => sum + Math.min(r.distance, MAX_LIMIT), 0);
+            document.getElementById('myTotal').textContent = myTotal.toFixed(1) + ' km';
+
+            // 팀별 누계
+            const teamTotals = {};
+            ['R', 'N', 'L', 'C'].forEach(t => {
+                const teamRecords = records.filter(r => r.team === t);
+                const personTotals = {};
+                
+                teamRecords.forEach(r => {
+                    if (!personTotals[r.name]) personTotals[r.name] = 0;
+                    personTotals[r.name] += r.distance;
+                });
+
+                teamTotals[t] = Object.values(personTotals).reduce((sum, total) => {
+                    return sum + Math.min(total, MAX_LIMIT);
+                }, 0);
+
+                document.getElementById('team' + t).textContent = teamTotals[t].toFixed(1) + ' km';
+            });
+
+            // 내 팀 표시
+            if (team) {
+                document.getElementById('myTeam').textContent = team;
+                
+                // 팀 순위
+                const sortedTeams = Object.entries(teamTotals).sort((a, b) => b[1] - a[1]);
+                const myTeamRank = sortedTeams.findIndex(t => t[0] === team) + 1;
+                document.getElementById('teamRank').textContent = myTeamRank + '위';
+
+                // 1위 팀
+                document.getElementById('firstTeam').textContent = 
+                    sortedTeams[0][0] + ': ' + sortedTeams[0][1].toFixed(1) + ' km';
+            }
+        }
+
+        // 랭킹 업데이트
+        function updateRankings() {
+            const personTotals = {};
+            
+            records.forEach(r => {
+                if (!personTotals[r.name]) {
+                    personTotals[r.name] = { total: 0, team: r.team };
+                }
+                personTotals[r.name].total += r.distance;
+            });
+
+            const rankings = Object.entries(personTotals).map(([name, data]) => ({
+                name,
+                team: data.team,
+                total: Math.min(data.total, MAX_LIMIT)
+            })).sort((a, b) => b.total - a.total);
+
+            // TOP 10
+            const topBody = document.getElementById('topRankingBody');
+            topBody.innerHTML = '';
+            rankings.slice(0, 10).forEach((person, index) => {
+                const row = topBody.insertRow();
+                let rankBadge = `<span class="rank-badge">${index + 1}</span>`;
+                if (index === 0) rankBadge = `<span class="rank-badge rank-1">🥇</span>`;
+                if (index === 1) rankBadge = `<span class="rank-badge rank-2">🥈</span>`;
+                if (index === 2) rankBadge = `<span class="rank-badge rank-3">🥉</span>`;
+                
+                row.innerHTML = `
+                    <td>${rankBadge}</td>
+                    <td>${person.name}</td>
+                    <td>${person.team}</td>
+                    <td>${person.total.toFixed(1)}</td>
+                `;
+            });
+
+            // 하위 10
+            const bottomBody = document.getElementById('bottomRankingBody');
+            bottomBody.innerHTML = '';
+            const bottomRankings = rankings.slice(-10).reverse();
+            bottomRankings.forEach((person, index) => {
+                const row = bottomBody.insertRow();
+                const actualRank = rankings.length - bottomRankings.length + index + 1;
+                row.innerHTML = `
+                    <td><span class="rank-badge">${actualRank}</span></td>
+                    <td>${person.name}</td>
+                    <td>${person.team}</td>
+                    <td>${person.total.toFixed(1)}</td>
+                `;
+            });
+        }
+
+        // 랭킹 탭 전환
+        function showRanking(type) {
+            const topDiv = document.getElementById('topRanking');
+            const bottomDiv = document.getElementById('bottomRanking');
+            const buttons = document.querySelectorAll('.tab-button');
+
+            if (type === 'top') {
+                topDiv.style.display = 'block';
+                bottomDiv.style.display = 'none';
+                buttons[0].classList.add('active');
+                buttons[1].classList.remove('active');
+            } else {
+                topDiv.style.display = 'none';
+                bottomDiv.style.display = 'block';
+                buttons[0].classList.remove('active');
+                buttons[1].classList.add('active');
+            }
+        }
+
+        // 최근 기록 업데이트
+        function updateRecentRecords(filter = 'all') {
+            const recordsList = document.getElementById('recordsList');
+            const name = document.getElementById('name').value.trim();
+            const team = document.getElementById('team').value;
+
+            let filteredRecords = [...records].sort((a, b) => 
+                new Date(b.timestamp) - new Date(a.timestamp)
+            );
+
+            if (filter === 'myTeam' && team) {
+                filteredRecords = filteredRecords.filter(r => r.team === team);
+            } else if (filter === 'myName' && name) {
+                filteredRecords = filteredRecords.filter(r => r.name === name);
+            } else if (filter === 'today') {
+                const today = new Date().toDateString();
+                filteredRecords = filteredRecords.filter(r => 
+                    new Date(r.timestamp).toDateString() === today
+                );
+            }
+
+            recordsList.innerHTML = '';
+            filteredRecords.slice(0, 10).forEach(record => {
+                const date = new Date(record.timestamp);
+                const item = document.createElement('div');
+                item.className = 'record-item';
+                item.innerHTML = `
+                    <strong>${record.name}</strong> (${record.team}팀) - 
+                    <strong>${record.distance.toFixed(1)}km</strong>
+                    <br>
+                    <small>${date.toLocaleString('ko-KR')}</small>
+                `;
+                recordsList.appendChild(item);
+            });
+
+            if (filteredRecords.length === 0) {
+                recordsList.innerHTML = '<div style="text-align: center; color: #999;">기록이 없습니다.</div>';
+            }
+        }
+
+        // 필터 적용
+        function filterRecords(type) {
+            const buttons = document.querySelectorAll('.filter-btn');
+            buttons.forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+            updateRecentRecords(type);
+        }
+    </script>
+</body>
+</html>
